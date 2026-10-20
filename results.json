@@ -1,0 +1,30 @@
+{
+  "question": "Can a class-balanced, isotonic-calibrated LightGBM model give more trustworthy confidence for an assistant's income predictions than an uncalibrated random forest on the public Adult dataset?",
+  "method": "Single stratified 75/25 train/test split (seed 42) of OpenML Adult. Baseline random forest raw probabilities vs. balanced LightGBM with 5-fold isotonic calibration, both fitted on the training split only; test set used once for scoring. Model seeds 42, 43, 44.",
+  "dataset": {
+    "name": "Adult (OpenML data ID 1590)",
+    "source_url": "https://www.openml.org/d/1590",
+    "n_rows": 48842,
+    "n_train": 36631,
+    "n_test": 12211,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "Brier score (test split)",
+  "higher_is_better": false,
+  "baseline": "Standard 300-tree random forest on one-hot features; raw predict_proba used as confidence.",
+  "improved": "Same preprocessing and data; class_weight='balanced' LightGBM wrapped in 5-fold isotonic CalibratedClassifierCV so predicted confidence is recalibrated to observed frequencies.",
+  "metrics": {
+    "baseline_score": 0.10059341046258154,
+    "improved_score": 0.08693577200674718,
+    "improvement": 0.013657638455834356,
+    "baseline_score_std": 8.303465465907212e-05,
+    "improved_score_std": 0.0,
+    "baseline_f1": 0.7932983059159694,
+    "improved_f1": 0.818034398177375,
+    "baseline_accuracy": 0.8573417410531489,
+    "improved_accuracy": 0.8758496437638194,
+    "n_model_seeds": 3
+  },
+  "notes": "Single data split; spread reflects model seeds only, not split variability. Hyperparameters were fixed a priori with no search, so the test set was not used for selection. fetch_openml does not accept a timeout argument, so only the reachability check uses timeout=60; fetch_openml itself is retried on errors. OpenML Adult is not the paper's dataset; the paper's own model and result are not stated, so this is a generic illustration of calibration, not a replication. Class weighting distorts probabilities; isotonic calibration on the training folds is intended to correct that. Macro-F1 and accuracy use a 0.5 threshold and are secondary."
+}
