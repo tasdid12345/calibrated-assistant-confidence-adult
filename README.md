@@ -21,6 +21,27 @@ python analysis.py
 
 Results are written to `results.json`. Charts are saved to `figures/`.
 
+## Results (latest run)
+
+On the public Adult dataset (single 75/25 split), a class-balanced LightGBM with isotonic calibration reduced test Brier score to 0.087 from 0.101 for a standard 300-tree random forest using raw probabilities (lower is better), a gain from one split only.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.1006 |
+| improved_score | 0.08694 |
+| improvement | 0.01366 |
+| baseline_score_std | 0.00008303 |
+| improved_score_std | 0 |
+| baseline_f1 | 0.7933 |
+| improved_f1 | 0.818 |
+| baseline_accuracy | 0.8573 |
+| improved_accuracy | 0.8758 |
+| n_model_seeds | 3 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Single data split; spread reflects model seeds only, not split variability. Hyperparameters were fixed a priori with no search, so the test set was not used for selection. fetch_openml does not accept a timeout argument, so only the reachability check uses timeout=60; fetch_openml itself is retried on errors. OpenML Adult is not the paper's dataset; the paper's own model and result are not stated, so this is a generic illustration of calibration, not a replication. Class weighting distorts probabilities; isotonic calibration on the training folds is intended to correct that. Macro-F1 and accuracy use a 0.5 threshold and are secondary.
+
 ## Reference
 
 This project is motivated by the following paper:
